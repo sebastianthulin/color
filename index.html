@@ -52,12 +52,11 @@
    ─────────────────────────────────────────────── */
 
 :root {
-  --neutral-0: var(--base);
-  --neutral-1: color-mix(in oklch, var(--contrast) 5%, var(--base));
-  --neutral-2: color-mix(in oklch, var(--contrast) 10%, var(--base));
-  --neutral-3: color-mix(in oklch, var(--contrast) 20%, var(--base));
-  --neutral-4: color-mix(in oklch, var(--contrast) 35%, var(--base));
-  --neutral-5: color-mix(in oklch, var(--contrast) 60%, var(--base));
+  --neutral-1: color-mix(in oklch, var(--contrast), var(--base) / 0.95);
+  --neutral-2: color-mix(in oklch, var(--contrast), var(--base) / 0.90);
+  --neutral-3: color-mix(in oklch, var(--contrast), var(--base) / 0.80);
+  --neutral-4: color-mix(in oklch, var(--contrast), var(--base) / 0.65);
+  --neutral-5: color-mix(in oklch, var(--contrast), var(--base) / 0.40);
 }
 
 /* ───────────────────────────────────────────────
