@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<template>
+  LLM INFO: 
+
+  - This is an HTML document that demonstrates a color system using OKLCH color space and CSS color-mix() function.
+  - The document defines a 4-color system with primary, secondary, base, and contrast colors.
+  - It includes styles for buttons, cards, form inputs, and alerts, all derived from the seed colors.
+  - The document also supports dark mode by adjusting the base and contrast colors.
+
+  Rules when editing:
+  1. Maintain the structure of the color system using OKLCH and color-mix().
+  2. Ensure that all derived colors are computed from the four seed colors.
+  3. Preserve the responsiveness of the design, including dark mode support.
+  4. All component styles should use the defined CSS variables for colors, ensuring consistency.
+  5. Do not use color-mix if not necessary; prefer using seed colors or derived colors directly.
+
+</template>
+
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>OKLCH UI Demo – 4-color System</title>
+
+<style>
+/* ───────────────────────────────────────────────
+   1) Seed Colors (the only ones needed)
+   ─────────────────────────────────────────────── */
+
+:root {
+  /* Provided RGB converted to OKLCH */
+  --primary: oklch(78.279% 0.16797 66.191);
+  --secondary: oklch(72.349% 0.07108 49.531);
+
+  --primary-contrast: color-contrast(var(--primary) vs black, white);
+  --secondary-contrast: color-contrast(var(--secondary) vs black, white);
+
+  --primary-dark: color-mix(in oklch, var(--contrast) 20%, var(--primary));
+  --secondary-dark: color-mix(in oklch, var(--contrast) 20%, var(--secondary));
+
+  --primary-light: color-mix(in oklch, var(--base) 20%, var(--primary));
+  --secondary-light: color-mix(in oklch, var(--base) 20%, var(--secondary));
+
+  --base: oklch(1 0 0);             /* white */
+  --contrast: oklch(0 0 0);         /* black */
+}
+
+/* ───────────────────────────────────────────────
+   2) Neutral ramp (automatic shades)
+   ─────────────────────────────────────────────── */
+
+:root {
+  --neutral-0: var(--base);
+  --neutral-1: color-mix(in oklch, var(--contrast) 5%, var(--base));
+  --neutral-2: color-mix(in oklch, var(--contrast) 10%, var(--base));
+  --neutral-3: color-mix(in oklch, var(--contrast) 20%, var(--base));
+  --neutral-4: color-mix(in oklch, var(--contrast) 35%, var(--base));
+  --neutral-5: color-mix(in oklch, var(--contrast) 60%, var(--base));
+}
+
+/* ───────────────────────────────────────────────
+   3) Surfaces, borders, shadows
+   ─────────────────────────────────────────────── */
+
+:root {
+  --surface-1: color-mix(in oklch, var(--primary) 6%, var(--base));
+  --surface-2: color-mix(in oklch, var(--primary) 12%, var(--base));
+  --surface-3: color-mix(in oklch, var(--primary) 20%, var(--base));
+
+  --border: color-mix(in oklch, var(--contrast) 20%, var(--base));
+  --shadow-color: color-mix(in oklch, var(--contrast) 20%, transparent);
+}
+
+/* ───────────────────────────────────────────────
+   4) Dark Mode (automatic from same seeds)
+   ─────────────────────────────────────────────── */
+/*
+@media (prefers-color-scheme: dark) {
+  :root {
+    --base: oklch(0 0 0);
+    --contrast: oklch(1 0 0);
+  }
+}*/ 
+
+/* ───────────────────────────────────────────────
+   5) Global Styles
+   ─────────────────────────────────────────────── */
+
+body {
+  margin: 0;
+  padding: 2rem;
+  font-family: system-ui, sans-serif;
+  background: var(--neutral-1);
+  color: var(--contrast);
+}
+
+h1, h2 {
+  font-weight: 600;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* ───────────────────────────────────────────────
+   6) Components
+   ─────────────────────────────────────────────── */
+
+/* Buttons */
+button {
+  font: inherit;
+  padding: 0.6rem 1.1rem;
+  border-radius: .5rem;
+  border: 1px solid var(--border);
+  background: var(--primary);
+  box-shadow: 0 2px 4px var(--shadow-color);
+  cursor: pointer;
+  transition: background .15s;
+  color: var(--primary-contrast) !important;
+}
+button:hover {
+  background: var(--primary-hover);
+}
+
+button.secondary {
+  background: var(--secondary);
+  color: color-mix(in oklch, var(--secondary) 95%, var(--contrast));
+}
+button.secondary:hover {
+  background: var(--secondary-hover);
+}
+
+/* Card */
+.card {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  padding: 1rem 1.25rem;
+  border-radius: .75rem;
+  box-shadow: 0 2px 5px var(--shadow-color);
+  margin-top: 1.5rem;
+}
+
+/* Inputs */
+input, textarea, select {
+  font: inherit;
+  padding: .55rem .75rem;
+  border-radius: .4rem;
+  border: 1px solid var(--neutral-3);
+  background: var(--neutral-0);
+  color: var(--contrast);
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: .5rem;
+}
+input:focus, textarea:focus, select:focus {
+  outline: 2px solid color-mix(in oklch, var(--primary) 40%, transparent);
+  border-color: var(--primary);
+}
+
+/* Alerts */
+.alert {
+  border-radius: .5rem;
+  padding: .75rem .9rem;
+  border: 1px solid var(--border);
+  margin-top: 1rem;
+}
+
+.alert-info {
+  background: var(--alert-info-bg);
+  border-color: var(--alert-info-border);
+}
+
+.alert-warning {
+  background: var(--alert-warning-bg);
+  border-color: var(--alert-warning-border);
+}
+
+/* Spacing helpers */
+.spacer { height: 2rem; }
+
+#colors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+#colors div {
+  padding: 1rem;
+  border-radius: .4rem;
+  font-family: monospace;
+  font-size: .5rem;
+}
+
+/* ───────────────────────────────────────────────
+   6) Derived Colors (precomputed for clarity)
+   ─────────────────────────────────────────────── */
+
+:root {
+  /* Button hover colors */
+  --primary-hover: color-mix(in oklch, var(--primary) 80%, var(--contrast));
+  --secondary-hover: color-mix(in oklch, var(--secondary) 80%, var(--contrast));
+
+  /* Alert colors */
+  --alert-info-bg: color-mix(in oklch, var(--primary) 12%, var(--base));
+  --alert-info-border: color-mix(in oklch, var(--primary) 40%, var(--base));
+  --alert-warning-bg: color-mix(in oklch, var(--secondary) 15%, var(--base));
+  --alert-warning-border: color-mix(in oklch, var(--secondary) 45%, var(--base));
+}
+</style>
+</head>
+
+
+<body>
+<div class="container">
+  <h1>OKLCH UI – 4-Color System Demo</h1>
+  <p>This entire interface is generated using only four seed colors,
+     with all other colors computed automatically using <b>OKLCH + color-mix()</b>.</p>
+
+  <h2>Colors</h2>
+
+  <div id="colors">
+
+    <!-- Primary & Secondary -->
+    <div style="background: var(--primary); color: var(--primary-contrast);">
+     <code>var(--primary)</code>
+    </div>
+    <div style="background: var(--secondary); color: var(--secondary-contrast);">
+     <code>var(--secondary)</code>
+    </div>
+
+    <!-- Neutrals-->
+    <div style="background: var(--neutral-0); color: var(--contrast);">
+     <code>var(--neutral-0)</code>
+    </div>
+    <div style="background: var(--neutral-1); color: var(--contrast);">
+     <code>var(--neutral-1)</code>
+    </div>
+    <div style="background: var(--neutral-2); color: var(--contrast);">
+      <code>var(--neutral-2)</code>
+    </div>
+    <div style="background: var(--neutral-3); color: var(--contrast);">
+      <code>var(--neutral-3)</code>
+    </div>
+    <div style="background: var(--neutral-4); color: var(--contrast);">
+      <code>var(--neutral-4)</code>
+    </div>
+    <div style="background: var(--neutral-5); color: var(--base);">
+      <code>var(--neutral-5)</code>
+    </div>
+    
+      <!-- Surfaces -->
+    <div style="background: var(--surface-1); color: var(--contrast);">
+      <code>var(--surface-1)</code>
+    </div>  
+    <div style="background: var(--surface-2); color: var(--contrast);">
+      <code>var(--surface-2)</code>
+    </div>
+    <div style="background: var(--surface-3); color: var(--contrast);">
+      <code>var(--surface-3)</code>
+    </div>
+
+  </div>
+
+  <h2>Buttons</h2>
+  <button>Primary Button</button>
+  <button class="secondary">Secondary Button</button>
+
+  <div class="spacer"></div>
+
+  <h2>Card</h2>
+  <div class="card">
+    <h3>Card Title</h3>
+    <p>This card surface and border colors come from OKLCH blends of your primary + base colors.</p>
+  </div>
+
+  <h2>Form Inputs</h2>
+  <label>
+    Name
+    <input type="text" placeholder="Your name">
+  </label>
+
+  <label>
+    Message
+    <textarea placeholder="Write something..."></textarea>
+  </label>
+
+  <div class="spacer"></div>
+
+  <h2>Alerts</h2>
+  <div class="alert alert-info">This is an info alert using OKLCH with primary.</div>
+  <div class="alert alert-warning">This is a warning alert using OKLCH with secondary.</div>
+</div>
+
+<!-- Settings Drawer -->
+<aside class="settings-drawer">
+  <h2>Settings</h2>
+  <div class="setting-group">
+    <label for="primaryColor">Primary Color</label>
+    <input type="color" id="primaryColor" />
+  </div>
+  <div class="setting-group">
+    <label for="secondaryColor">Secondary Color</label>
+    <input type="color" id="secondaryColor" />
+  </div>
+</aside>
+
+<style>
+  .settings-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 300px;
+    height: 100vh;
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    z-index: 1000h;
+  }
+  .settings-drawer h2 {
+    margin-top: 0;
+    font-size: 1.3em;
+  }
+  .setting-group {
+    margin-bottom: 16px;
+  }
+  .setting-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+  .settings-drawer input[type="color"] {
+    width: 48px;
+    height: 32px;
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
+  .container {
+    margin-right: 320px;
+  }
+</style>
+
+<script src="https://unpkg.com/chroma-js@3.1.2/src/chroma.js" type="module"></script>
+<script>
+// Utility to get/set colors in localStorage
+function getColorSetting(key, fallback) {
+  return localStorage.getItem(key) || fallback;
+}
+function setColorSetting(key, value) {
+  localStorage.setItem(key, value);
+}
+
+// Convert hex to OKLCH using chroma.js
+function hexToOklch(hex) {
+  try {
+    const c = window.chroma(hex);
+    const oklch = c.oklch();
+    // oklch() returns [l, c, h], format for CSS: oklch(l c h)
+    return `oklch(${(oklch[0]*100).toFixed(3)}% ${oklch[1].toFixed(5)} ${oklch[2].toFixed(3)})`;
+  } catch {
+    return hex;
+  }
+}
+
+function applyColors() {
+  const primaryHex = getColorSetting('primaryColor', '#1976d2');
+  const secondaryHex = getColorSetting('secondaryColor', '#e91e63');
+  // Convert to OKLCH
+  const primaryOklch = hexToOklch(primaryHex);
+  const secondaryOklch = hexToOklch(secondaryHex);
+  document.documentElement.style.setProperty('--primary', primaryOklch);
+  document.documentElement.style.setProperty('--secondary', secondaryOklch);
+  // Optionally update color pickers
+  document.getElementById('primaryColor').value = primaryHex;
+  document.getElementById('secondaryColor').value = secondaryHex;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Set initial values
+  document.getElementById('primaryColor').value = getColorSetting('primaryColor', '#1976d2');
+  document.getElementById('secondaryColor').value = getColorSetting('secondaryColor', '#e91e63');
+  applyColors();
+  // Listeners
+  document.getElementById('primaryColor').addEventListener('input', function(e) {
+    setColorSetting('primaryColor', e.target.value);
+    applyColors();
+  });
+  document.getElementById('secondaryColor').addEventListener('input', function(e) {
+    setColorSetting('secondaryColor', e.target.value);
+    applyColors();
+  });
+});
+</script>
+
+</body>
+</html>
