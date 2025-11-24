@@ -309,6 +309,14 @@ input:focus, textarea:focus, select:focus {
     <label for="secondaryColor">Secondary Color</label>
     <input type="color" id="secondaryColor" />
   </div>
+  <div class="setting-group">
+    <label for="darkModeSelect">Dark Mode</label>
+    <select id="darkModeSelect">
+      <option value="system">System</option>
+      <option value="on">On</option>
+      <option value="off">Off</option>
+    </select>
+  </div>
 </aside>
 
 <style>
@@ -344,6 +352,15 @@ input:focus, textarea:focus, select:focus {
     background: none;
     cursor: pointer;
   }
+  .settings-drawer select {
+    font: inherit;
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid var(--neutral-2);
+    background: var(--neutral-0);
+    color: var(--contrast);
+    margin-top: 4px;
+  }
   .container {
     margin-right: 320px;
   }
@@ -358,8 +375,13 @@ function getColorSetting(key, fallback) {
 function setColorSetting(key, value) {
   localStorage.setItem(key, value);
 }
-
-// Convert hex to OKLCH using chroma.js
+// Utility for dark mode setting
+function getDarkModeSetting() {
+  return localStorage.getItem('darkMode') || 'system';
+}
+function setDarkModeSetting(value) {
+  localStorage.setItem('darkMode', value);
+}
 function hexToOklch(hex) {
   try {
     const c = window.chroma(hex);
@@ -374,22 +396,39 @@ function hexToOklch(hex) {
 function applyColors() {
   const primaryHex = getColorSetting('primaryColor', '#1976d2');
   const secondaryHex = getColorSetting('secondaryColor', '#e91e63');
-  // Convert to OKLCH
   const primaryOklch = hexToOklch(primaryHex);
   const secondaryOklch = hexToOklch(secondaryHex);
   document.documentElement.style.setProperty('--primary', primaryOklch);
   document.documentElement.style.setProperty('--secondary', secondaryOklch);
-  // Optionally update color pickers
   document.getElementById('primaryColor').value = primaryHex;
   document.getElementById('secondaryColor').value = secondaryHex;
 }
 
+function applyDarkMode() {
+  const darkMode = getDarkModeSetting();
+  const root = document.documentElement;
+  if (darkMode === 'on') {
+    root.style.setProperty('--base', 'oklch(0 0 0)');
+    root.style.setProperty('--contrast', 'oklch(1 0 0)');
+  } else if (darkMode === 'off') {
+    root.style.setProperty('--base', 'oklch(1 0 0)');
+    root.style.setProperty('--contrast', 'oklch(0 0 0)');
+  } else {
+    root.style.removeProperty('--base');
+    root.style.removeProperty('--contrast');
+  }
+  const select = document.getElementById('darkModeSelect');
+  if (select) select.value = darkMode;
+}
+
 document.addEventListener('DOMContentLoaded', function() {
-  // Set initial values
   document.getElementById('primaryColor').value = getColorSetting('primaryColor', '#1976d2');
   document.getElementById('secondaryColor').value = getColorSetting('secondaryColor', '#e91e63');
   applyColors();
-  // Listeners
+  const darkModeSetting = getDarkModeSetting();
+  const darkModeSelect = document.getElementById('darkModeSelect');
+  if (darkModeSelect) darkModeSelect.value = darkModeSetting;
+  applyDarkMode();
   document.getElementById('primaryColor').addEventListener('input', function(e) {
     setColorSetting('primaryColor', e.target.value);
     applyColors();
@@ -398,6 +437,17 @@ document.addEventListener('DOMContentLoaded', function() {
     setColorSetting('secondaryColor', e.target.value);
     applyColors();
   });
+  if (darkModeSelect) {
+    darkModeSelect.addEventListener('change', function(e) {
+      setDarkModeSetting(e.target.value);
+      applyDarkMode();
+    });
+  }
+});
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function() {
+  if (getDarkModeSetting() === 'system') {
+    applyDarkMode();
+  }
 });
 </script>
 
