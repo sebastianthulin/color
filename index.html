@@ -52,11 +52,11 @@
    ─────────────────────────────────────────────── */
 
 :root {
-  --neutral-1: color-mix(in oklch, var(--contrast), var(--base) / 0.95);
-  --neutral-2: color-mix(in oklch, var(--contrast), var(--base) / 0.90);
-  --neutral-3: color-mix(in oklch, var(--contrast), var(--base) / 0.80);
-  --neutral-4: color-mix(in oklch, var(--contrast), var(--base) / 0.65);
-  --neutral-5: color-mix(in oklch, var(--contrast), var(--base) / 0.40);
+  --neutral-1: color-mix(in oklch, var(--contrast) 5%, var(--base));
+  --neutral-2: color-mix(in oklch, var(--contrast) 10%, var(--base));
+  --neutral-3: color-mix(in oklch, var(--contrast) 20%, var(--base));
+  --neutral-4: color-mix(in oklch, var(--contrast) 40%, var(--base));
+  --neutral-5: color-mix(in oklch, var(--contrast) 60%, var(--base));
 }
 
 /* ───────────────────────────────────────────────
@@ -75,13 +75,13 @@
 /* ───────────────────────────────────────────────
    4) Dark Mode (automatic from same seeds)
    ─────────────────────────────────────────────── */
-/*
+
 @media (prefers-color-scheme: dark) {
   :root {
     --base: oklch(0 0 0);
     --contrast: oklch(1 0 0);
   }
-}*/ 
+}
 
 /* ───────────────────────────────────────────────
    5) Global Styles
@@ -91,7 +91,7 @@ body {
   margin: 0;
   padding: 2rem;
   font-family: system-ui, sans-serif;
-  background: var(--neutral-1);
+  background: var(--surface-1);
   color: var(--contrast);
 }
 
@@ -180,13 +180,13 @@ input:focus, textarea:focus, select:focus {
 /* Spacing helpers */
 .spacer { height: 2rem; }
 
-#colors {
+#colors > div {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
 }
 
-#colors div {
+#colors > div > div {
   padding: 1rem;
   border-radius: .4rem;
   font-family: monospace;
@@ -223,44 +223,49 @@ input:focus, textarea:focus, select:focus {
   <div id="colors">
 
     <!-- Primary & Secondary -->
-    <div style="background: var(--primary); color: var(--primary-contrast);">
-     <code>var(--primary)</code>
-    </div>
-    <div style="background: var(--secondary); color: var(--secondary-contrast);">
-     <code>var(--secondary)</code>
+    <div>
+      <div style="background: var(--primary); color: var(--primary-contrast);">
+      <code>var(--primary)</code>
+      </div>
+      <div style="background: var(--secondary); color: var(--secondary-contrast);">
+      <code>var(--secondary)</code>
+      </div>
     </div>
 
     <!-- Neutrals-->
-    <div style="background: var(--neutral-0); color: var(--contrast);">
-     <code>var(--neutral-0)</code>
-    </div>
-    <div style="background: var(--neutral-1); color: var(--contrast);">
-     <code>var(--neutral-1)</code>
-    </div>
-    <div style="background: var(--neutral-2); color: var(--contrast);">
-      <code>var(--neutral-2)</code>
-    </div>
-    <div style="background: var(--neutral-3); color: var(--contrast);">
-      <code>var(--neutral-3)</code>
-    </div>
-    <div style="background: var(--neutral-4); color: var(--contrast);">
-      <code>var(--neutral-4)</code>
-    </div>
-    <div style="background: var(--neutral-5); color: var(--base);">
-      <code>var(--neutral-5)</code>
-    </div>
-    
-      <!-- Surfaces -->
-    <div style="background: var(--surface-1); color: var(--contrast);">
-      <code>var(--surface-1)</code>
-    </div>  
-    <div style="background: var(--surface-2); color: var(--contrast);">
-      <code>var(--surface-2)</code>
-    </div>
-    <div style="background: var(--surface-3); color: var(--contrast);">
-      <code>var(--surface-3)</code>
+    <div>
+      <div style="background: var(--neutral-0); color: var(--contrast);">
+      <code>var(--neutral-0)</code>
+      </div>
+      <div style="background: var(--neutral-1); color: var(--contrast);">
+      <code>var(--neutral-1)</code>
+      </div>
+      <div style="background: var(--neutral-2); color: var(--contrast);">
+        <code>var(--neutral-2)</code>
+      </div>
+      <div style="background: var(--neutral-3); color: var(--contrast);">
+        <code>var(--neutral-3)</code>
+      </div>
+      <div style="background: var(--neutral-4); color: var(--contrast);">
+        <code>var(--neutral-4)</code>
+      </div>
+      <div style="background: var(--neutral-5); color: var(--base);">
+        <code>var(--neutral-5)</code>
+      </div>
     </div>
 
+      <!-- Surfaces -->
+    <div>
+      <div style="background: var(--surface-1); color: var(--contrast);">
+        <code>var(--surface-1)</code>
+      </div>  
+      <div style="background: var(--surface-2); color: var(--contrast);">
+        <code>var(--surface-2)</code>
+      </div>
+      <div style="background: var(--surface-3); color: var(--contrast);">
+        <code>var(--surface-3)</code>
+      </div>
+    </div>
   </div>
 
   <h2>Buttons</h2>
@@ -318,6 +323,7 @@ input:focus, textarea:focus, select:focus {
     flex-direction: column;
     gap: 24px;
     z-index: 1000h;
+    border-left: 1px solid var(--neutral-1);
   }
   .settings-drawer h2 {
     margin-top: 0;
